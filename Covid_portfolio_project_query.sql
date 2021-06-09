@@ -1,23 +1,23 @@
 --Selecteren van de te gebruiken data
 SELECT		location, 
-			date, 
-			total_cases, 
-			new_cases, 
-			total_deaths, 
-			population
+		date, 
+		total_cases, 
+		new_cases, 
+		total_deaths, 
+		population
 FROM		Covid_Deaths
 ORDER BY	location, date
 
 --Totaal aantal geinfecteerden versus Totaal aantal overleden in Nederland
 --Toont de waarschijnlijkheid van overlijden aan Covid in Nederland op een bepaalde datum. Gesorteerd op hoogste waarschijnlijkheid van overlijden
 SELECT		location, 
-			date, 
-			total_cases, 
-			new_cases, 
-			total_deaths, 
-			new_deaths,
-			population, 
-			CAST((CAST(total_deaths AS DECIMAL (12,2)) / CAST(total_cases AS DECIMAL(12,2)))*100 AS decimal (10,2)) AS Doodspercentage
+		date, 
+		total_cases, 
+		new_cases, 
+		total_deaths, 
+		new_deaths,
+		population, 
+		CAST((CAST(total_deaths AS DECIMAL (12,2)) / CAST(total_cases AS DECIMAL(12,2)))*100 AS decimal (10,2)) AS Doodspercentage
 			
 FROM		Covid_Deaths
 WHERE		Location LIKE 'Netherlands'
@@ -26,13 +26,13 @@ ORDER BY	Doodspercentage DESC
 --Totaal aantal nieuwe infecties versus de totale populatie in Nederland
 --Toont het percentage geinfecteerden in Nederland ten opzichte van de populatie op een bepaalde datum.
 SELECT		location, 
-			date, 
-			total_cases, 
-			new_cases, 
-			total_deaths, 
-			new_deaths,
-			population,
-			CAST((CAST(total_cases AS DECIMAL (12,2)) / CAST(population AS DECIMAL(12,2)))*100 AS decimal (10,2)) AS InfectiePercentage
+		date, 
+		total_cases, 
+		new_cases, 
+		total_deaths, 
+		new_deaths,
+		population,
+		CAST((CAST(total_cases AS DECIMAL (12,2)) / CAST(population AS DECIMAL(12,2)))*100 AS decimal (10,2)) AS InfectiePercentage
 
 FROM		Covid_Deaths
 WHERE		Location LIKE 'Netherlands'
@@ -40,9 +40,9 @@ ORDER BY	InfectiePercentage DESC
 
 --Landen met het hoogste infectiepercentage
 SELECT		Location, 
-			Population, 
-			MAX(total_cases) as Hoogst_aantal_geinfecteerden,  
-			MAX(CAST((CAST(total_cases AS DECIMAL (12,2)) / CAST(population AS DECIMAL(12,2)))*100 AS decimal (10,2))) as MAX_InfectiePercentage
+		Population, 
+		MAX(total_cases) as Hoogst_aantal_geinfecteerden,  
+		MAX(CAST((CAST(total_cases AS DECIMAL (12,2)) / CAST(population AS DECIMAL(12,2)))*100 AS decimal (10,2))) as MAX_InfectiePercentage
 FROM		Covid_Deaths
 GROUP BY	Location, Population
 ORDER BY	MAX_InfectiePercentage desc
@@ -59,9 +59,9 @@ order by	TotalDeathCount desc
 --COVID statistieken van de wereld versus die van Nederland
 --Een vergelijking van COVID infectie- en overlijdensstatistieken van nederland en de rest van de wereld
 SELECT		Location,
-			continent,
-			population,
-			MAX(CAST(total_cases AS decimal(12,2))/CAST(population AS decimal(12,2)))*100 AS Infectiepercentage,
+		continent,
+		population,
+		MAX(CAST(total_cases AS decimal(12,2))/CAST(population AS decimal(12,2)))*100 AS Infectiepercentage,
 
 				(
 					SELECT MAX(CAST(total_cases AS decimal(12,2))/CAST(population AS decimal(12,2)))
@@ -69,7 +69,7 @@ SELECT		Location,
 					WHERE Location LIKE 'Netherlands'
 				)	AS Infectiepercentage_NL,
 
-			SUM(CAST(new_deaths AS decimal(12,2))/CAST(population AS decimal(12,2)))*100 AS Doden_per_populatie,
+		SUM(CAST(new_deaths AS decimal(12,2))/CAST(population AS decimal(12,2)))*100 AS Doden_per_populatie,
 
 				(
 					SELECT SUM(CAST(new_deaths AS decimal(12,2))/CAST(population AS decimal(12,2)))
@@ -77,7 +77,7 @@ SELECT		Location,
 					WHERE Location LIKE 'Netherlands'
 				)	AS Doden_per_populatie_NL,
 
-			AVG(CAST(new_deaths AS decimal(12,2)))	AS Gemiddeld_#_doden_p_dag,
+		AVG(CAST(new_deaths AS decimal(12,2)))	AS Gemiddeld_#_doden_p_dag,
 
 				(
 					SELECT AVG(CAST(new_deaths AS decimal(12,2)))
@@ -85,7 +85,7 @@ SELECT		Location,
 					WHERE Location LIKE 'Netherlands'
 				)	AS Gemiddeld_#_doden_p_dag_NL,
 
-			MAX(new_deaths)							AS Dodelijkste_dag,
+		MAX(new_deaths)	AS Dodelijkste_dag,
 
 				(
 					SELECT MAX(new_deaths)
@@ -93,7 +93,7 @@ SELECT		Location,
 					WHERE Location LIKE 'Netherlands'
 				)	AS Dodelijkste_dag_NL,
 
-			SUM(new_deaths)							AS Totaal_doden,
+			SUM(new_deaths)	AS Totaal_doden,
 
 				(
 					SELECT SUM(new_deaths)
@@ -109,7 +109,7 @@ ORDER BY	Gemiddeld_#_doden_p_dag DESC
 
 --Toont de continenten met de hoogste sterftecijfers per populatie
 SELECT		continent, 
-			MAX(Total_deaths) AS Totaal_aantal_overleden
+		MAX(Total_deaths) AS Totaal_aantal_overleden
 FROM		Covid_Deaths
 WHERE		Continent LIKE '%_%'
 GROUP BY	continent
@@ -117,8 +117,8 @@ ORDER BY	Totaal_aantal_overleden DESC
 
 --Wereldwijde cijfers
 SELECT		SUM(new_cases) AS Totaal_geinfecteerd, 
-			SUM(cast(new_deaths as int)) AS Totaal_aantal_overleden, 
-			SUM(CAST(new_deaths AS DECIMAL(12,2)))/SUM(CAST(new_cases AS DECIMAL(12,2)))*100 AS Doodspercentage
+		SUM(cast(new_deaths as int)) AS Totaal_aantal_overleden, 
+		SUM(CAST(new_deaths AS DECIMAL(12,2)))/SUM(CAST(new_cases AS DECIMAL(12,2)))*100 AS Doodspercentage
 FROM		Covid_Deaths
 WHERE		Continent LIKE '%_%'
 ORDER BY	1,2
@@ -129,15 +129,15 @@ ORDER BY	1,2
 SELECT		DISTINCT location
 FROM		Covid_Deaths
 WHERE		location NOT IN		(
-								SELECT DISTINCT Location
-								FROM Covid_Vaccinations
+					SELECT DISTINCT Location
+					FROM Covid_Vaccinations
 								)
 
 --Top 5 landen met meest gezette prikken
 
 SELECT TOP 5	Continent,
-				Location,
-				SUB.Som_gezette_prikken
+		Location,
+		SUB.Som_gezette_prikken
 				
 FROM			(SELECT		Continent, 
 							Location, 
@@ -148,8 +148,8 @@ FROM			(SELECT		Continent,
 							Location)					AS	SUB
 
 GROUP BY	Continent,
-			Location,
-			SUB.Som_gezette_prikken
+		Location,
+		SUB.Som_gezette_prikken
 ORDER BY	SUB.Som_gezette_prikken DESC	
 
 --CTE Toont het percentage van de populatie die tenminste 1 vaccinatie prik heeft gekregen in Nederland.
@@ -164,11 +164,11 @@ With PopvsVac
 as
 (
 Select		 D.continent, 
-			 D.location, 
-			 D.date, 
-			 D.population, 
-			 V.new_vaccinations, 
-			 SUM(V.new_vaccinations) OVER (Partition by D.Location Order by D.location, D.Date) as Running_total_vaccinaties
+		 D.location, 
+		 D.date, 
+		 D.population, 
+		 V.new_vaccinations, 
+		 SUM(V.new_vaccinations) OVER (Partition by D.Location Order by D.location, D.Date) as Running_total_vaccinaties
 
 From		Covid_Deaths AS D
 Join		Covid_Vaccinations AS V
@@ -191,7 +191,7 @@ WITH PopvsVac
 			 Running_total_vaccinaties)
 AS
 (
-Select		 D.continent, 
+Select		 	 D.continent, 
 			 D.location, 
 			 D.date, 
 			 D.population, 
